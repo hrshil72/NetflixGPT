@@ -3,16 +3,22 @@ import Header from "./Header";
 import { signOut } from "firebase/auth";
 import { auth } from "../utils/firebase";
 import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import useFetchMovies from "../hooks/useFetchMovies";
 import MainContainer from "./MainContainer";
 import SecondaryContainer from "./SecondaryContainer";
 import usePopularMovies from "../hooks/usePopularMovies";
 import useTopRatedMovies from "../hooks/useTopRatedMovies";
+import GPTSearch from "./GPTSearch";
+import { toggleGptSearchView } from "../utils/gptSlice";
+import { SUPPORTED_LANGS } from "../utils/constants";
+import { changeLanguage } from "../utils/langConfigSlice";
 
 const Browse = () => {
   const navigate = useNavigate();
   const user = useSelector((store) => store.user);
+  const gptSearch = useSelector((store) => store.gpt.showGPTSearch);
+  const dispatch = useDispatch();
 
   function handleSignOut() {
     signOut(auth)
@@ -20,6 +26,14 @@ const Browse = () => {
       .catch((error) => {
         navigate("/error");
       });
+  }
+
+  function handleToggleView() {
+    dispatch(toggleGptSearchView());
+  }
+
+  function handleLangChange(e) {
+    dispatch(changeLanguage(e.target.value));
   }
 
   useFetchMovies();
@@ -30,7 +44,24 @@ const Browse = () => {
     <div className="w-screen h-screen overflow-x-hidden	">
       <div className="flex justify-between w-screen">
         <Header />
-        <div className="flex items-center gap-5 z-90 bg-[#141414]">
+        <div className="flex items-center gap-5 z-90 px-8 bg-[#141414]">
+          {gptSearch && (
+            <select onChange={handleLangChange}>
+              {SUPPORTED_LANGS.map((lang) => {
+                return (
+                  <option key={lang.identifier} value={lang.identifier}>
+                    {lang.name}
+                  </option>
+                );
+              })}
+            </select>
+          )}
+
+          <button
+            onClick={handleToggleView}
+            className="text-white bg-red-500 rounded-lg text-sm py-1 px-3">
+            {gptSearch ? "Homepage" : "GPT Search"}
+          </button>
           <img className="w-12" src={user?.photoURL}></img>
           <button
             onClick={handleSignOut}
@@ -39,8 +70,15 @@ const Browse = () => {
           </button>
         </div>
       </div>
-      <MainContainer />
-      <SecondaryContainer />
+
+      {gptSearch ? (
+        <GPTSearch />
+      ) : (
+        <>
+          <MainContainer />
+          <SecondaryContainer />
+        </>
+      )}
     </div>
   );
 };
