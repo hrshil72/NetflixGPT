@@ -42,11 +42,11 @@ const Browse = () => {
 
   return (
     <div className="w-screen h-screen overflow-x-hidden	">
-      <div className="flex justify-between w-screen">
+      <div className="flex justify-between w-screen overflow-x-hidden">
         <Header />
-        <div className="flex items-center gap-5 z-90 px-8 bg-[#141414]">
+        <div className="flex items-center z-90 px-5 me-3 bg-[#141414] overflow-x-hidden">
           {gptSearch && (
-            <select onChange={handleLangChange}>
+            <select onChange={handleLangChange} className="me-3">
               {SUPPORTED_LANGS.map((lang) => {
                 return (
                   <option key={lang.identifier} value={lang.identifier}>
@@ -59,13 +59,13 @@ const Browse = () => {
 
           <button
             onClick={handleToggleView}
-            className="text-white bg-red-500 rounded-lg text-sm py-1 px-3">
+            className="text-white bg-red-500 rounded-lg text-sm py-1 px-3 me-3">
             {gptSearch ? "Homepage" : "GPT Search"}
           </button>
-          <img className="w-12" src={user?.photoURL}></img>
+          <img className="w-12 me-3" src={user?.photoURL}></img>
           <button
             onClick={handleSignOut}
-            className="text-white bg-red-600 rounded-md px-3 py-2 text-sm">
+            className="text-white bg-red-600 rounded-md px-2  py-2 text-sm ">
             Sign out of Netflix{" "}
           </button>
         </div>
