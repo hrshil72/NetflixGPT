@@ -42,21 +42,22 @@ const GPTSearchBar = () => {
     const tmdbResult = await Promise.all(promiseArray);
 
     dispatch(addGptMovie({ movieNames: gptMovies, movieResults: tmdbResult }));
+    console.log(tmdbResult);
   }
 
   return (
     <div className="mt-[2%] flex justify-center ">
       <form
-        className="py-5 grid grid-cols-12 bg-black px-6"
+        className="py-5 grid grid-cols-9 bg-black px-6 rounded-lg"
         onSubmit={(e) => e.preventDefault()}>
         <input
           ref={searchText}
-          className="py-4 px-5 col-span-9 outline-none rounded-lg"
+          className="py-4 px-5 col-span-8 outline-none rounded-lg"
           type="text"
           placeholder={lang[langKey].gptSearchPlaceholder}></input>
         <button
           onClick={handleGPTSearch}
-          className="rounded-lg bg-red-500 ms-2 py-5 px-4">
+          className="rounded-lg bg-red-500 ms-2 py-5 px-4 ">
           {lang[langKey].search}
         </button>
       </form>
